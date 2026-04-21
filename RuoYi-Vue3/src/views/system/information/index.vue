@@ -38,7 +38,7 @@
 
     <el-table v-loading="loading" :data="informationList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="informationId" />
+      <el-table-column label="主键" align="center" prop="id" />
       <el-table-column label="图书名称" align="center" prop="bookName" />
       <el-table-column label="图书类型" align="center" prop="booksTypeName" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -92,6 +92,7 @@
 
 <script setup name="Information">
 import { listInformation, getInformation, delInformation, addInformation, updateInformation } from "@/api/system/information";
+// 引入类型 API
 import { listType } from "@/api/system/type";
 
 const { proxy } = getCurrentInstance();
@@ -106,6 +107,7 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 
+// 存放类型下拉列表
 const typeOptions = ref([]);
 
 const data = reactive({
@@ -138,7 +140,7 @@ function getList() {
   });
 }
 
-/** 查询分类下拉树列表 */
+/** 查询分类列表 */
 function getTypeList() {
   listType({ pageNum: 1, pageSize: 1000 }).then(response => {
     typeOptions.value = response.rows;
@@ -154,7 +156,7 @@ function cancel() {
 // 表单重置
 function reset() {
   form.value = {
-    informationId: null, // 【修正】：此处清空的是 informationId
+    id: null,
     bookName: null,
     typeId: null
   };
@@ -175,8 +177,7 @@ function resetQuery() {
 
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  // 【修正】：取值从 id 改为 informationId
-  ids.value = selection.map(item => item.informationId);
+  ids.value = selection.map(item => item.id);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -191,9 +192,8 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  // 【修正】：取值从 id 改为 informationId
-  const informationId = row.informationId || ids.value;
-  getInformation(informationId).then(response => {
+  const id = row.id || ids.value;
+  getInformation(id).then(response => {
     form.value = response.data;
     open.value = true;
     title.value = "修改图书信息";
@@ -204,7 +204,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["informationRef"].validate(valid => {
     if (valid) {
-      if (form.value.informationId != null) {
+      if (form.value.id != null) {
         updateInformation(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
@@ -223,8 +223,7 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  // 【修正】：取值从 id 改为 informationId
-  const deleteIds = row.informationId || ids.value;
+  const deleteIds = row.id || ids.value;
   proxy.$modal.confirm('是否确认删除图书编号为"' + deleteIds + '"的数据项？').then(function() {
     return delInformation(deleteIds);
   }).then(() => {
