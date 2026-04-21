@@ -257,13 +257,21 @@ function handleAdd() {
 
 /** 修改按钮操作 */
 function handleUpdate(row) {
-  reset()
-  const configId = row.configId || ids.value
-  getConfig(configId).then(response => {
-    form.value = response.data
-    open.value = true
-    title.value = "修改参数"
-  })
+  reset();
+  // 这里的 row 可能是一个 PointerEvent (点击工具栏按钮时)
+  // 确保能从 row 对象或已选中的 ids 数组中拿到正确的数值
+  const bookId = row.id || ids.value[0]; 
+  
+  if (!bookId) {
+    proxy.$modal.msgError("请选择要修改的数据");
+    return;
+  }
+  
+  getInformation(bookId).then(response => {
+    form.value = response.data;
+    open.value = true;
+    title.value = "修改图书 information";
+  });
 }
 
 /** 提交按钮 */

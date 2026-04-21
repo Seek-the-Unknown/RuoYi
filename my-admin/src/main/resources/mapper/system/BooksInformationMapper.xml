@@ -5,14 +5,16 @@
 <mapper namespace="com.ruoyi.system.mapper.BooksInformationMapper">
 
     <resultMap type="BooksInformation" id="BooksInformationResult">
-        <result property="id"    column="id"    />
+        <result property="id"    column="book_id"    />
         <result property="bookName"    column="book_name"    />
+        <result property="bookAuthor"    column="book_author"    />
+        <result property="bookImage"    column="book_image"    />
         <result property="typeId"    column="type_id"    />
         <result property="booksTypeName"    column="books_type_name"    />
     </resultMap>
 
     <sql id="selectBooksInformationVo">
-        select a.*, b.type_name as books_type_name
+        select a.book_id, a.book_name, a.book_author, a.book_image, a.type_id, b.type_name as books_type_name
         from books_information a
                  left join books_type b on a.type_id = b.type_id
     </sql>
@@ -21,23 +23,27 @@
         <include refid="selectBooksInformationVo"/>
         <where>
             <if test="bookName != null  and bookName != ''"> and a.book_name like concat('%', #{bookName}, '%')</if>
-            <if test="booksTypeName != null  and booksTypeName != ''"> and b.type_name like concat('%', #{booksTypeName}, '%')</if>
+            <if test="bookAuthor != null  and bookAuthor != ''"> and a.book_author like concat('%', #{bookAuthor}, '%')</if>
         </where>
     </select>
 
-    <select id="selectBooksInformationById" parameterType="Long" resultMap="BooksInformationResult">
+    <select id="selectBooksInformationByBookId" parameterType="Long" resultMap="BooksInformationResult">
         <include refid="selectBooksInformationVo"/>
-        where a.id = #{id}
+        where a.book_id = #{id}
     </select>
 
     <insert id="insertBooksInformation" parameterType="BooksInformation" useGeneratedKeys="true" keyProperty="id">
         insert into books_information
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="bookName != null">book_name,</if>
+            <if test="bookAuthor != null">book_author,</if>
+            <if test="bookImage != null">book_image,</if>
             <if test="typeId != null">type_id,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="bookName != null">#{bookName},</if>
+            <if test="bookAuthor != null">#{bookAuthor},</if>
+            <if test="bookImage != null">#{bookImage},</if>
             <if test="typeId != null">#{typeId},</if>
         </trim>
     </insert>
@@ -46,17 +52,19 @@
         update books_information
         <trim prefix="SET" suffixOverrides=",">
             <if test="bookName != null">book_name = #{bookName},</if>
+            <if test="bookAuthor != null">book_author = #{bookAuthor},</if>
+            <if test="bookImage != null">book_image = #{bookImage},</if>
             <if test="typeId != null">type_id = #{typeId},</if>
         </trim>
-        where id = #{id}
+        where book_id = #{id}
     </update>
 
-    <delete id="deleteBooksInformationById" parameterType="Long">
-        delete from books_information where id = #{id}
+    <delete id="deleteBooksInformationByBookId" parameterType="Long">
+        delete from books_information where book_id = #{id}
     </delete>
 
-    <delete id="deleteBooksInformationByIds" parameterType="String">
-        delete from books_information where id in
+    <delete id="deleteBooksInformationByBookIds" parameterType="Long">
+        delete from books_information where book_id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
