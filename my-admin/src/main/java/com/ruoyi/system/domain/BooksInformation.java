@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class BooksInformation extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    /** 主键 (对应数据库 book_id) */
+    /** 主键 */
     private Long id;
 
     /** 图书名称 */
@@ -22,7 +22,7 @@ public class BooksInformation extends BaseEntity {
     @Excel(name = "图书作者")
     private String bookAuthor;
 
-    /** 图书封面 (保存图片路径) */
+    /** 图书封面 */
     @Excel(name = "图书封面")
     private String bookImage;
 

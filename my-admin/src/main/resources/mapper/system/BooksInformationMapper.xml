@@ -35,14 +35,14 @@
     <insert id="insertBooksInformation" parameterType="BooksInformation" useGeneratedKeys="true" keyProperty="id">
         insert into books_information
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="bookName != null">book_name,</if>
-            <if test="bookAuthor != null">book_author,</if>
+            <if test="bookName != null and bookName != ''">book_name,</if>
+            <if test="bookAuthor != null and bookAuthor != ''">book_author,</if>
             <if test="bookImage != null">book_image,</if>
             <if test="typeId != null">type_id,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="bookName != null">#{bookName},</if>
-            <if test="bookAuthor != null">#{bookAuthor},</if>
+            <if test="bookName != null and bookName != ''">#{bookName},</if>
+            <if test="bookAuthor != null and bookAuthor != ''">#{bookAuthor},</if>
             <if test="bookImage != null">#{bookImage},</if>
             <if test="typeId != null">#{typeId},</if>
         </trim>
@@ -51,8 +51,8 @@
     <update id="updateBooksInformation" parameterType="BooksInformation">
         update books_information
         <trim prefix="SET" suffixOverrides=",">
-            <if test="bookName != null">book_name = #{bookName},</if>
-            <if test="bookAuthor != null">book_author = #{bookAuthor},</if>
+            <if test="bookName != null and bookName != ''">book_name = #{bookName},</if>
+            <if test="bookAuthor != null and bookAuthor != ''">book_author = #{bookAuthor},</if>
             <if test="bookImage != null">book_image = #{bookImage},</if>
             <if test="typeId != null">type_id = #{typeId},</if>
         </trim>

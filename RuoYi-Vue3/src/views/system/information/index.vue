@@ -52,7 +52,7 @@
           <el-input v-model="form.bookAuthor" placeholder="请输入作者" />
         </el-form-item>
         <el-form-item label="图书类型" prop="typeId">
-          <el-select v-model="form.typeId" placeholder="请选择类型" clearable filterable style="width: 100%">
+          <el-select v-model="form.typeId" placeholder="请选择图书类型" clearable filterable style="width: 100%">
             <el-option v-for="item in typeOptions" :key="item.typeId" :label="item.typeName" :value="item.typeId" />
           </el-select>
         </el-form-item>
@@ -188,7 +188,7 @@ function submitForm() {
 
 function handleDelete(row) {
   const deleteIds = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除？').then(function() {
+  proxy.$modal.confirm('是否确认删除编号为"' + deleteIds + '"的数据项？').then(function() {
     return delInformation(deleteIds);
   }).then(() => {
     getList();
